@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: bitnami/postgresql:15
+    container_name: postgres-db
+    environment:
+      POSTGRESQL_USERNAME: docker
+      POSTGRESQL_PASSWORD: docker
+      POSTGRESQL_DATABASE: capybachallenge
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/bitnami/postgresql
+
+volumes:
+  postgres_data:
+    driver: local
