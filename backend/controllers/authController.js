@@ -84,4 +84,32 @@ export const getMe = async (req, res) => {
       res.status(500).json({ message: "Erro ao buscar usuário" });
     }
   };
-  
+
+export const changePassword = async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    
+    try {
+        const user = await prisma.user.findUnique({ where: { id: req.userId } });
+    
+        if (!user) {
+        return res.status(404).json({ message: "Usuário não encontrado" });
+        }
+    
+        const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+        if (!isPasswordValid) {
+        return res.status(401).json({ message: "Senha antiga incorreta" });
+        }
+    
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    
+        await prisma.user.update({
+        where: { id: req.userId },
+        data: { password: hashedNewPassword },
+        });
+    
+        res.json({ message: "Senha alterada com sucesso" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erro ao alterar senha" });
+    }
+}
