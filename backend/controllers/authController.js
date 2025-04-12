@@ -6,6 +6,14 @@ export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
   const image = req.file ? `/uploads/${req.file.filename}` : null;
 
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: "Nome, e-mail e senha são obrigatórios" });
+  }
+
+  if (email.trim() === "" || password.trim() === "" || name.trim() === "") {
+    return res.status(400).json({ error: "Campos não podem estar vazios" });
+  }
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -20,8 +28,12 @@ export const registerUser = async (req, res) => {
 
     res.status(201).json({ message: "Usuário registrado com sucesso", user });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erro ao registrar usuário" });
+    if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
+      return res.status(400).json({ error: "Este e-mail já está em uso" });
+    }else {
+      console.error(error);
+      res.status(500).json({ message: "Erro ao registrar usuário" });
+    }
   }
 };
 
@@ -112,4 +124,4 @@ export const changePassword = async (req, res) => {
         console.error(error);
         res.status(500).json({ message: "Erro ao alterar senha" });
     }
-}
+};

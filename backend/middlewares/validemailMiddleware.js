@@ -25,7 +25,7 @@ export const validEmail = async (req, res, next) => {
         if (user.emailVerified) {
         next();
         } else {
-        return res.status(403).json({ message: "Email não verificado" });
+        return res.status(403).json({ message: "Email não verificado. Para acessar a Lista Privativa e ter acesso aos Projetos Práticos, valide seu email." });
         }
 
     } catch (err) {
