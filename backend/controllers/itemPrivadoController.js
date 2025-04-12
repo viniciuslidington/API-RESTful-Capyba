@@ -1,6 +1,6 @@
 import prisma from "../lib/prisma.js";
 
-export const listarItens = async (req, res) => {
+export const listarItensPrivados = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 5;
     const search = req.query.search || '';
@@ -10,14 +10,12 @@ export const listarItens = async (req, res) => {
     try {
         const baseWhere = {
         AND: [
+            { type: 'Projeto' },
             {
             OR: [
                 { title: { contains: search, mode: 'insensitive' } },
                 { description: { contains: search, mode: 'insensitive' } },
             ],
-            },
-            {
-            NOT: { type: 'Projeto' },
             },
         ],
         };
@@ -34,7 +32,7 @@ export const listarItens = async (req, res) => {
         return res.json({ items, total, page, pageSize });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: "Erro ao listar itens públicos" });
+        return res.status(500).json({ error: "Erro ao listar projetos" });
     }
-};
-
+    };
+    
