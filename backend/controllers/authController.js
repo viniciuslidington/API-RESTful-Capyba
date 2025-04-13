@@ -104,12 +104,13 @@ export const changePassword = async (req, res) => {
   }
 };
 
-export const getMe = async (req, res) => {
+export const getUser = async (req, res) => {
+    const userId = req.userId;
+  
     try {
       const user = await prisma.user.findUnique({
-        where: { id: req.userId },
+        where: { id: userId },
         select: {
-          id: true,
           name: true,
           email: true,
           image: true,
