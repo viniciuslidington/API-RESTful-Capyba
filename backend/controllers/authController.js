@@ -142,7 +142,7 @@ export const editarUsuario = async (req, res) => {
 
     if (name) dataParaAtualizar.name = name;
     if (image) {
-      dataParaAtualizar.image = file.path || `/uploads/${file.filename}`;
+      dataParaAtualizar.image = req.file.path || `/uploads/${req.file.filename}`;
     }
 
     if (email && email !== user.email) {
