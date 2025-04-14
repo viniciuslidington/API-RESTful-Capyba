@@ -1,28 +1,31 @@
 /* eslint-disable no-undef */
-import request from "supertest";
-import app from "../app.js";
-import prisma from "../lib/prisma.js";
-import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
-import {jest} from '@jest/globals'
+import request from 'supertest';
+import app from '../app.js';
+import prisma from '../lib/prisma.js';
+import jwt from 'jsonwebtoken';
+import { jest } from '@jest/globals';
 
-jest.mock("nodemailer", () => ({
-  createTransport: jest.fn().mockReturnValue({
-    sendMail: jest.fn().mockResolvedValue(true),
-  }),
-}));
+// ✅ Mock nodemailer corretamente
+jest.mock('nodemailer', () => {
+  return {
+    createTransport: jest.fn(() => ({
+      sendMail: jest.fn().mockResolvedValue(true),
+    })),
+  };
+});
 
-describe("Email Controller", () => {
-  let authToken;
+import nodemailer from 'nodemailer';
+
+describe('Email Controller', () => {
   let mockUser;
+  let authToken;
 
   beforeAll(async () => {
-    // Cria um usuário de teste
     mockUser = await prisma.user.create({
       data: {
-        name: "Test User",
-        email: `test-${Date.now()}@example.com`,
-        password: "password123",
+        name: 'Usuário Teste',
+        email: `emailtest-${Date.now()}@mail.com`,
+        password: 'senha123',
         emailVerified: false,
       },
     });
@@ -31,76 +34,97 @@ describe("Email Controller", () => {
   });
 
   afterAll(async () => {
-    // Limpa os dados de teste e desconecta o Prisma
-    await prisma.user.deleteMany();
+    await prisma.user.deleteMany({ where: { email: { contains: 'emailtest-' } } });
     await prisma.$disconnect();
   });
 
-  describe("POST /email/enviar-confirmacao", () => {
-    it("deve enviar um e-mail de confirmação com sucesso", async () => {
+  describe('POST /api/email/enviar-confirmacao-email', () => {
+    it('deve enviar um e-mail de confirmação com sucesso', async () => {
       const res = await request(app)
-        .post("/api/email/enviar-confirmacao")
-        .set("Cookie", `token=${authToken}`);
+        .post('/api/email/enviar-confirmacao-email')
+        .set('Cookie', `token=${authToken}`);
 
       expect(res.statusCode).toBe(200);
-      expect(res.body.message).toBe("Email de confirmação enviado");
+      expect(res.body.message).toBe('Email de confirmação enviado');
       expect(nodemailer.createTransport).toHaveBeenCalled();
-    });
+      expect(nodemailer.createTransport().sendMail).toHaveBeenCalled();
+    }, 10000);
 
-    it("deve retornar erro se o usuário não for encontrado", async () => {
-      const invalidToken = jwt.sign({ id: 9999 }, process.env.JWT_SECRET); // ID inexistente
+    it('deve retornar erro se o usuário não for encontrado', async () => {
+      const fakeToken = jwt.sign({ id: 999999 }, process.env.JWT_SECRET);
 
       const res = await request(app)
-        .post("/api/email/enviar-confirmacao")
-        .set("Cookie", `token=${invalidToken}`);
+        .post('/api/email/enviar-confirmacao-email')
+        .set('Cookie', `token=${fakeToken}`);
 
       expect(res.statusCode).toBe(404);
-      expect(res.body.message).toBe("Usuário não encontrado");
+      expect(res.body.message).toBe('Usuário não encontrado');
     });
 
-    it("deve retornar erro se o e-mail já estiver verificado", async () => {
-      // Atualiza o usuário para ter o e-mail verificado
+    it('deve retornar erro se o email já estiver verificado', async () => {
       await prisma.user.update({
         where: { id: mockUser.id },
         data: { emailVerified: true },
       });
 
       const res = await request(app)
-        .post("/api/email/enviar-confirmacao")
-        .set("Cookie", `token=${authToken}`);
+        .post('/api/email/enviar-confirmacao-email')
+        .set('Cookie', `token=${authToken}`);
 
       expect(res.statusCode).toBe(400);
-      expect(res.body.message).toBe("Email já verificado");
+      expect(res.body.message).toBe('Email já verificado');
+    });
+
+    it('deve retornar erro 500 se ocorrer falha no envio do e-mail', async () => {
+      // forçando erro ao enviar e-mail
+      nodemailer.createTransport().sendMail.mockRejectedValueOnce(new Error('Erro SMTP'));
+
+      // garantir que o e-mail esteja desverificado novamente
+      await prisma.user.update({
+        where: { id: mockUser.id },
+        data: { emailVerified: false },
+      });
+
+      const res = await request(app)
+        .post('/api/email/enviar-confirmacao-email')
+        .set('Cookie', `token=${authToken}`);
+
+      expect(res.statusCode).toBe(500);
+      expect(res.body.message).toBe('Erro ao enviar email de confirmação');
     });
   });
 
-  describe("GET /email/confirmar-email", () => {
-    it("deve confirmar o e-mail com sucesso", async () => {
-      const tokenemail = jwt.sign({ id: mockUser.id }, process.env.JWT_EMAIL_TOKEN, {
-        expiresIn: process.env.JWT_EMAIL_EXPIRATION,
+  describe('GET /api/email/confirmar-email', () => {
+    it('deve confirmar o e-mail com sucesso', async () => {
+      await prisma.user.update({
+        where: { id: mockUser.id },
+        data: { emailVerified: false },
       });
 
-      const res = await request(app).get(`/api/email/confirmar-email?token=${tokenemail}`);
+      const token = jwt.sign(
+        { id: mockUser.id },
+        process.env.JWT_EMAIL_TOKEN,
+        { expiresIn: process.env.JWT_EMAIL_EXPIRATION || '5m' }
+      );
 
+      const res = await request(app).get(`/api/email/confirmar-email?token=${token}`);
       expect(res.statusCode).toBe(200);
-      expect(res.body.message).toBe("Email confirmado com sucesso");
+      expect(res.body.message).toBe('Email confirmado com sucesso');
 
-      const updatedUser = await prisma.user.findUnique({ where: { id: mockUser.id } });
-      expect(updatedUser.emailVerified).toBe(true);
+      const user = await prisma.user.findUnique({ where: { id: mockUser.id } });
+      expect(user.emailVerified).toBe(true);
     });
 
-    it("deve retornar erro se o token não for fornecido", async () => {
-      const res = await request(app).get("/api/email/confirmar-email");
-
-      expect(res.statusCode).toBe(400);
-      expect(res.body.message).toBe("Token não encontrado");
-    });
-
-    it("deve retornar erro se o token for inválido", async () => {
-      const res = await request(app).get("/api/email/confirmar-email?token=invalidtoken");
-
+    it('deve retornar erro se o token for inválido', async () => {
+      const res = await request(app).get('/api/email/confirmar-email?token=tokeninvalido');
       expect(res.statusCode).toBe(500);
-      expect(res.body.message).toBe("Erro ao confirmar e-mail");
+      expect(res.body.message).toBe('Erro ao confirmar e-mail');
+    });
+
+    it('deve retornar erro se o token não for fornecido', async () => {
+      const res = await request(app).get('/api/email/confirmar-email');
+      expect(res.statusCode).toBe(400);
+      expect(res.body.message).toBe('Token não encontrado');
     });
   });
 });
