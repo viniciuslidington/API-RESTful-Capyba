@@ -40,6 +40,10 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password || email.trim() === "" || password.trim() === "") {
+    return res.status(400).json({ message: "Campos não podem estar vazios" });
+  }
+
   try {
     const user = await prisma.user.findUnique({ where: { email } });
 
