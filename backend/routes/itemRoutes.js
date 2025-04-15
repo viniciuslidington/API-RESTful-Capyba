@@ -1,8 +1,7 @@
 import express from "express";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { validEmail } from "../middlewares/validemailMiddleware.js";
-import { listarItens } from "../controllers/itemController.js";
-import { listarItensPrivados } from "../controllers/itemPrivadoController.js";
+import { listarItens, listarItensPrivados } from "../controllers/itemController.js";
 
 
 const router = express.Router();

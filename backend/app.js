@@ -7,11 +7,11 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import itemRoutes from "./routes/itemRoutes.js";
 import emailRoutes from "./routes/emailRouter.js";
+import interesseRoutes from "./routes/interesseRoutes.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,5 +24,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/items", itemRoutes);
 app.use("/api/email", emailRoutes);
+app.use("/api/interesse", interesseRoutes);
 
 export default app;
