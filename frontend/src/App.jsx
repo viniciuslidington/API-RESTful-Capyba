@@ -38,8 +38,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
-          <Route path="/projetos" element={<ProtectedRoute onlyVerified><Projetos /></ProtectedRoute>} />
+          <Route path="/home/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
+          <Route path="/home/projetos" element={<ProtectedRoute onlyVerified><Projetos /></ProtectedRoute>} />
         </Routes>
       </Router>
     </AuthContext.Provider>
