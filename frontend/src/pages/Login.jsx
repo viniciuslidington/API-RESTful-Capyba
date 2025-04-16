@@ -1,32 +1,71 @@
-import { useState, useContext } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../App';
-import styles from '../styles/Login.module.css';
-import logo from '../assets/logo.png';
+import { useState, useContext, useCallback } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../App";
+import styles from "../styles/Login.module.css";
+import logo from "../assets/logo.png";
 
 export default function Login() {
   const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-    try {
-      const res = await axios.post('/api/auth/login', { email, password });
-      Cookies.set('token', res.data.token);
-      setUser(res.data.user);
-      navigate('/');
-    } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || 'Erro ao fazer login');
-    }
+  const loginRequest = async (credentials) => {
+    const response = await axios.post("/api/auth/login", credentials);
+    return response.data;
   };
+
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  }, []);
+
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setError("");
+      
+      // Validação simples do cliente
+      if (!formData.email || !formData.password) {
+        return setError("Por favor, preencha todos os campos");
+      }
+
+      setIsLoading(true);
+
+      try {
+        const data = await loginRequest(formData);
+        
+        // Armazena o token com expiração (1 dia)
+        Cookies.set("token", data.token, { expires: 1, secure: true });
+        setUser(data.user);
+        
+        // Redireciona para a página inicial
+        navigate("/home", { replace: true });
+        
+      } catch (err) {
+        console.error("Erro no login:", err);
+        
+        const errorMessage = err.response?.data?.message 
+          || err.message 
+          || "Erro ao conectar com o servidor";
+          
+        setError(errorMessage);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [formData, setUser, navigate]
+  );
 
   return (
     <div className={styles.loginContainer}>
@@ -35,15 +74,16 @@ export default function Login() {
           <div className={styles.loginHeader}>
             <img 
               src={logo} 
-              alt="Logo da Empresa" 
-              className={styles.logoImage}
+              alt="Logo da Capyba" 
+              className={styles.logoImage} 
+              loading="lazy"
             />
-            <h1 className={styles.loginTitle}>Nome da Empresa</h1>
+            <h1 className={styles.loginTitle}>CapybAcademy</h1>
           </div>
-          
-          <form onSubmit={handleLogin} className={styles.loginForm}>
+
+          <form onSubmit={handleSubmit} className={styles.loginForm} noValidate>
             {error && (
-              <div className={styles.errorMessage}>
+              <div className={styles.errorMessage} role="alert">
                 {error}
               </div>
             )}
@@ -54,12 +94,15 @@ export default function Login() {
               </label>
               <input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="seu@email.com"
                 className={styles.inputField}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleChange}
                 required
+                disabled={isLoading}
+                autoComplete="username"
               />
             </div>
 
@@ -69,51 +112,32 @@ export default function Login() {
               </label>
               <input
                 id="password"
+                name="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="Digite sua senha"
                 className={styles.inputField}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password}
+                onChange={handleChange}
                 required
+                disabled={isLoading}
+                autoComplete="current-password"
+                minLength={6}
               />
             </div>
 
-            <div className={styles.optionsContainer}>
-              <div className={styles.rememberMe}>
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className={styles.rememberCheckbox}
-                />
-                <label htmlFor="remember-me" className={styles.rememberLabel}>
-                  Lembrar de mim
-                </label>
-              </div>
-
-              <div>
-                <a href="#" className={styles.forgotPassword}>
-                  Esqueceu sua senha?
-                </a>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className={styles.submitButton}
+            <button 
+              type="submit" 
+              className={styles.submitButton} 
+              disabled={isLoading}
+              aria-busy={isLoading}
             >
-              Entrar
+              {isLoading ? (
+                <span className={styles.buttonLoader}></span>
+              ) : (
+                "Entrar"
+              )}
             </button>
           </form>
-          
-          <div className={styles.loginFooter}>
-            <p className={styles.footerText}>
-              Não tem uma conta?{' '}
-              <a href="#" className={styles.signupLink}>
-                Cadastre-se
-              </a>
-            </p>
-          </div>
         </div>
       </div>
     </div>

@@ -1,149 +1,109 @@
 .loginContainer {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
-  }
-  
-  .loginCard {
-    width: 100%;
-    max-width: 28rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-  
-  .loginBox {
-    background-color: white;
-    border-radius: 1rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    overflow: hidden;
-  }
-  
-  .loginHeader {
-    background-color: #2563eb;
-    padding: 1.5rem;
-    text-align: center;
-  }
-  
-  .logoImage {
-    height: 4rem;
-    margin: 0 auto 1rem;
-  }
-  
-  .loginTitle {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    font-weight: 700;
-    color: white;
-  }
-  
-  .loginForm {
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .errorMessage {
-    background-color: #fef2f2;
-    color: #dc2626;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    font-size: 0.875rem;
-  }
-  
-  .inputGroup {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .inputLabel {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 500;
-    color: #374151;
-    margin-bottom: 0.25rem;
-  }
-  
-  .inputField {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-  }
-  
-  .inputField:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-  }
-  
-  .optionsContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .rememberMe {
-    display: flex;
-    align-items: center;
-  }
-  
-  .rememberCheckbox {
-    height: 1rem;
-    width: 1rem;
-    color: #2563eb;
-    border-color: #d1d5db;
-    border-radius: 0.25rem;
-  }
-  
-  .rememberLabel {
-    margin-left: 0.5rem;
-    font-size: 0.875rem;
-    color: #374151;
-  }
-  
-  .forgotPassword {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #2563eb;
-  }
-  
-  .submitButton {
-    width: 100%;
-    background-color: #2563eb;
-    color: white;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    font-size: 1rem;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .submitButton:hover {
-    background-color: #1d4ed8;
-  }
-  
-  .submitButton:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-  }
-  
-  .loginFooter {
-    background-color: #f9fafb;
-    padding: 1.5rem 2rem;
-    text-align: center;
-  }
-  
-  .footerText {
-    font-size: 0.875rem;
-    color: #4b5563;
-  }
-  
-  .signupLink {
-    font-weight: 500;
-    color: #2563eb;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f8f9fa; /* 60% - Cor dominante (fundo claro) */
+}
+
+.loginCard {
+  background-color: #ffffff; /* 30% - Cor secundária (card branco) */
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef; /* Borda sutil */
+}
+
+.loginHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logoImage {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.loginTitle {
+  font-size: 1.75rem;
+  color: #212529;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.inputField {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background-color: #fff;
+  color: #333;
+  font-size: 1rem;
+  box-sizing: border-box; /* Importante para width 100% */
+  transition: all 0.3s ease;
+}
+
+.inputField::placeholder {
+  color: #aaa;
+  opacity: 1; /* Firefox reduz opacidade por padrão */
+}
+
+.inputField:focus {
+  border-color: #99FF99;
+  box-shadow: 0 0 0 3px rgba(153, 255, 153, 0.2);
+  outline: none;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: #99FF99; /* 10% - Cor de destaque */
+  color: #1a3b1f; /* Texto escuro para contraste */
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.submitButton:hover {
+  background-color: #88ee88;
+  transform: translateY(-1px);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+}
+
+.errorMessage {
+  color: #ff6b6b;
+  background-color: #fff5f5;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  text-align: center;
+  font-size: 0.9rem;
+  border: 1px solid #ffd6d6;
+}

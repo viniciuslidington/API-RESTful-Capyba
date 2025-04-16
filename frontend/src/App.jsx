@@ -8,7 +8,6 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Projetos from './pages/Projetos';
 import Perfil from './pages/Perfil';
-import Navbar from './components/Navbar';
 
 export const AuthContext = createContext();
 
@@ -36,10 +35,9 @@ function App() {
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       <Router>
-        <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
           <Route path="/projetos" element={<ProtectedRoute onlyVerified><Projetos /></ProtectedRoute>} />
         </Routes>
