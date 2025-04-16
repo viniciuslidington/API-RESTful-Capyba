@@ -107,3 +107,110 @@
   font-size: 0.9rem;
   border: 1px solid #ffd6d6;
 }
+/* Formulário de Registro */
+.registerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.registerInputGroup {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.registerDivider {
+  border: none;
+  height: 1px;
+  background-color: #e9ecef;
+  margin: 1rem 0;
+}
+
+/* File Input */
+.fileInputLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.fileInput {
+  display: inline-block;
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.fileInput:hover {
+  border-color: #99FF99;
+  background-color: #f0f0f0;
+}
+
+.fileInputText {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Preview da Imagem */
+.photoPreviewContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.imagePreview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e0e0e0;
+}
+
+/* Link de Login */
+.registerLink {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.registerButton {
+  background: none;
+  border: none;
+  color: #99FF99;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.registerButton:hover {
+  text-decoration: underline;
+}
+
+/* Loader */
+.buttonLoader {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

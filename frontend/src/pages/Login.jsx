@@ -138,6 +138,17 @@ export default function Login() {
               )}
             </button>
           </form>
+
+          <div className={styles.registerLink}>
+            <p>Não tem uma conta?</p>
+            <button 
+              type="button" 
+              className={styles.registerButton} 
+              onClick={() => navigate("/register")}
+            >
+              Cadastre-se
+            </button>
+          </div>
         </div>
       </div>
     </div>
