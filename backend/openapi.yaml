@@ -1,0 +1,321 @@
+openapi: 3.1.0
+info:
+  title: API para Plataforma de Aprendizado para a empresa Capyba
+  description: API para gerenciamento de itens de aprendizado e interesses de usuários.
+  version: 1.0.0
+
+paths:
+  # --- ITENS PÚBLICOS E PRIVADOS ---
+  /api/items/getlist:
+    get:
+      summary: Lista itens públicos de aprendizado
+      tags:
+        - Itens
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Página atual
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+          description: Tamanho da página
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Termo de busca
+        - name: orderBy
+          in: query
+          schema:
+            type: string
+          description: Campo de ordenação
+        - name: orderDirection
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Direção da ordenação
+      responses:
+        '200':
+          description: Lista de itens públicos retornada com sucesso
+        '500':
+          description: Erro ao buscar os itens
+
+  /api/items/getprojects:
+    get:
+      summary: Lista itens do tipo "Projeto" (privados, apenas para e-mails verificados)
+      tags:
+        - Itens
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: orderBy
+          in: query
+          schema:
+            type: string
+        - name: orderDirection
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        '200':
+          description: Lista de projetos retornada com sucesso
+        '403':
+          description: Acesso negado. E-mail não verificado.
+        '500':
+          description: Erro ao buscar os projetos
+
+  # --- INTERESSES ---
+  /api/interesse/interesse:
+    post:
+      summary: Marca interesse de um usuário em um item
+      tags:
+        - Interesses
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemId:
+                  type: string
+                  description: ID do item de aprendizado
+      responses:
+        '201':
+          description: Interesse registrado com sucesso
+        '400':
+          description: ID do item ausente ou interesse já existente
+        '404':
+          description: Item não encontrado
+        '500':
+          description: Erro ao registrar interesse
+
+    delete:
+      summary: Remove o interesse de um usuário em um item
+      tags:
+        - Interesses
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemId:
+                  type: string
+                  description: ID do item de aprendizado
+      responses:
+        '200':
+          description: Interesse removido com sucesso
+        '500':
+          description: Erro ao remover interesse
+
+  /api/interesse/interesses:
+    get:
+      summary: Lista os itens marcados com interesse pelo usuário logado
+      tags:
+        - Interesses
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista de interesses retornada com sucesso
+        '500':
+          description: Erro ao buscar itens de interesse
+
+  # --- ENVIAR E CONFIRMAR EMAIL ---
+  /api/email/enviar-confirmacao-email:
+    post:
+      summary: Envia o e-mail de confirmação para o usuário
+      tags:
+        - Email
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: E-mail de confirmação enviado com sucesso
+        '500':
+          description: Erro ao enviar o e-mail de confirmação
+  
+  /api/email/confirmar-email:
+    get:
+      summary: Confirma o e-mail do usuário com o token
+      tags:
+        - Email
+      responses:
+        '200':
+          description: E-mail confirmado com sucesso
+        '400':
+          description: Token de confirmação inválido ou ausente
+        '500':
+          description: Erro ao confirmar o e-mail
+
+  # --- AUTH ---
+  /api/auth/register:
+    post:
+      summary: Registra um novo usuário
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Usuário registrado com sucesso
+        '400':
+          description: Dados inválidos
+        '500':
+          description: Erro ao registrar o usuário
+
+  /api/auth/login:
+    post:
+      summary: Loga um usuário
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login bem-sucedido, JWT gerado
+        '401':
+          description: Credenciais inválidas
+        '500':
+          description: Erro no login
+
+  /api/auth/logout:
+    post:
+      summary: Desloga um usuário
+      tags:
+        - Autenticação
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Logout realizado com sucesso
+        '500':
+          description: Erro no logout
+  
+  /api/auth/me:
+    get:
+      summary: Retorna informações do usuário logado
+      tags:
+        - Autenticação
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Informações do usuário logado
+        '500':
+          description: Erro ao buscar informações do usuário
+  
+  /api/auth/password:
+    post:
+      summary: Atualiza a senha do usuário
+      tags:
+        - Autenticação
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        '200':
+          description: Senha atualizada com sucesso
+        '400':
+          description: Senha atual incorreta
+        '500':
+          description: Erro ao atualizar a senha
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        emailVerified:
+          type: boolean
+    LearningItem:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    UserLearningItem:
+      type: object
+      properties:
+        userId:
+          type: string
+        learningItemId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
