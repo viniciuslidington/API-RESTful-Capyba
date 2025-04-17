@@ -18,11 +18,8 @@ export const enviarConfirmacaoEmail = async (req, res) => {
             }
         });
 
-        if(!user){
-            return res.status(404).json({ message: "Usuário não encontrado" });
-        }
         if(user.emailVerified){
-            return res.status(400).json({ message: "Email já verificado" });
+            return res.status(200).json({ message: "Email já verificado" });
         }
         const tokenemail = jwt.sign({ id: user.id }, process.env.JWT_EMAIL_TOKEN, {
             expiresIn: process.env.JWT_EMAIL_EXPIRATION
@@ -85,7 +82,6 @@ export const enviarConfirmacaoEmail = async (req, res) => {
 
         return res.status(200).json({ message: "Email de confirmação enviado" });
     }catch(error){
-        console.error("Erro ao enviar confirmação de e-mail:" , error);
         return res.status(500).json({ message: "Erro ao enviar email de confirmação" });
     }
 };
