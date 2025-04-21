@@ -106,7 +106,6 @@ export const confirmarEmail = async (req, res) => {
         });
         return res.status(200).json({ message: "Email confirmado com sucesso" });
     }catch(error){
-        console.error("Erro ao confirmar e-mail:", error);
         return res.status(500).json({ message: "Erro ao confirmar e-mail" });
     }
 };

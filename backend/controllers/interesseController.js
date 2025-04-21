@@ -46,7 +46,6 @@ export const marcarInteresse = async (req, res) => {
       });
   
     } catch (err) {
-      console.error("Erro ao marcar interesse:", err);
       return res.status(500).json({ message: "Erro ao registrar interesse." });
     }
 };
@@ -66,7 +65,6 @@ export const removerInteresse = async (req, res) => {
   
       return res.status(200).json({ message: "Interesse removido com sucesso." });
     } catch (err) {
-      console.error("Erro ao remover interesse:", err);
       return res.status(500).json({ message: "Erro ao remover interesse." });
     }
 };
@@ -84,7 +82,6 @@ export const listarInteressesDoUsuario = async (req, res) => {
   
       return res.json({ itens });
     } catch (err) {
-      console.error("Erro ao listar interesses:", err);
       return res.status(500).json({ message: "Erro ao buscar itens de interesse." });
     }
   };
