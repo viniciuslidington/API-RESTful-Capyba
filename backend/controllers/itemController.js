@@ -33,7 +33,6 @@ export const listarItens = async (req, res) => {
     
         return res.json({ items, total, page, pageSize });
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ error: "Erro ao listar itens públicos" });
     }
 };
@@ -69,7 +68,6 @@ export const listarItensPrivados = async (req, res) => {
     
         return res.json({ items, total, page, pageSize });
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ error: "Erro ao listar projetos" });
     }
 };
