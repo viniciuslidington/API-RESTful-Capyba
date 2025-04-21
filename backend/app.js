@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.js";
 import itemRoutes from "./routes/itemRoutes.js";
 import emailRoutes from "./routes/emailRouter.js";
 import interesseRoutes from "./routes/interesseRoutes.js";
+import { setupSwaggerDocs } from "./config/swagger.js";
 
 dotenv.config();
 
@@ -25,5 +26,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/items", itemRoutes);
 app.use("/api/email", emailRoutes);
 app.use("/api/interesse", interesseRoutes);
+
+setupSwaggerDocs(app);
 
 export default app;
