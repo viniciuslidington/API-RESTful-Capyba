@@ -8,6 +8,8 @@ import authRoutes from "./routes/authRoutes.js";
 import itemRoutes from "./routes/itemRoutes.js";
 import emailRoutes from "./routes/emailRouter.js";
 import interesseRoutes from "./routes/interesseRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import { setupSwaggerDocs } from "./config/swagger.js";
 
 dotenv.config();
 
@@ -20,10 +22,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Rotas
 app.use("/api/auth", authRoutes);
 app.use("/api/items", itemRoutes);
 app.use("/api/email", emailRoutes);
 app.use("/api/interesse", interesseRoutes);
+app.use("/api/admin", adminRoutes);
+
+setupSwaggerDocs(app);
 
 export default app;
