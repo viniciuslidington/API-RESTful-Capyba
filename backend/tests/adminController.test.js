@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from '../app.js';
 import prisma from '../lib/prisma.js';
 import jwt from 'jsonwebtoken';
+import { jest } from '@jest/globals';
 
 describe('Admin Controller + Middleware', () => {
   let adminUser, normalUser, authTokenAdmin, authTokenUser, item;
@@ -16,9 +17,8 @@ describe('Admin Controller + Middleware', () => {
         email: `admin@capyba-${Date.now()}.com`,
         password: 'adminpass',
         emailVerified: true,
-          },
-      });
-
+      },
+    });
 
     // Cria usuário comum
     normalUser = await prisma.user.create({
@@ -43,15 +43,14 @@ describe('Admin Controller + Middleware', () => {
       },
     });
     await prisma.user.deleteMany({
-        where: {
-          OR: [
-            { email: { contains: "user-" } },
-            { email: { contains: "admin@capyba-" } },
-            { email: { contains: "@example.com" } },
-          ],
-        },
-  });
-
+      where: {
+        OR: [
+          { email: { contains: 'user-' } },
+          { email: { contains: 'admin@capyba-' } },
+          { email: { contains: '@example.com' } },
+        ],
+      },
+    });
   });
 
   describe('Middleware - validAdmin', () => {
@@ -73,6 +72,16 @@ describe('Admin Controller + Middleware', () => {
         .set('Cookie', `token=${authTokenAdmin}`);
       expect(res.status).toBe(200);
     });
+
+    it('deve retornar erro 500 ao buscar usuários (simulação)', async () => {
+      jest.spyOn(prisma.user, 'findMany').mockRejectedValue(new Error('Erro simulado'));
+      const res = await request(app)
+        .get('/api/admin/users')
+        .set('Cookie', `token=${authTokenAdmin}`);
+      expect(res.status).toBe(500);
+      expect(res.body.message).toBe('Erro ao buscar usuários');
+      prisma.user.findMany.mockRestore();
+    });
   });
 
   describe('Admin Controller Endpoints', () => {
@@ -86,6 +95,16 @@ describe('Admin Controller + Middleware', () => {
       item = res.body;
     });
 
+    it('deve retornar erro 500 ao adicionar item (simulação)', async () => {
+      jest.spyOn(prisma.learningItem, 'create').mockRejectedValue(new Error('Erro simulado'));
+      const res = await request(app)
+        .post('/api/admin/additem')
+        .send({ title: 'Item Teste', description: 'Descrição', type: 'Curso' })
+        .set('Cookie', `token=${authTokenAdmin}`);
+      expect(res.status).toBe(500);
+      expect(res.body.message).toBe('Erro ao adicionar item');
+      prisma.learningItem.create.mockRestore();
+    });
 
     it('deve deletar um item com sucesso', async () => {
       const itemToDelete = await prisma.learningItem.create({
@@ -104,6 +123,17 @@ describe('Admin Controller + Middleware', () => {
       expect(res.body.message).toMatch(/Item deletado com sucesso/);
     });
 
+    it('deve retornar erro 500 ao deletar item (simulação)', async () => {
+      jest.spyOn(prisma.learningItem, 'delete').mockRejectedValue(new Error('Erro simulado'));
+      const res = await request(app)
+        .post('/api/admin/deleteitem')
+        .send({ id: 999 }) // ID inexistente
+        .set('Cookie', `token=${authTokenAdmin}`);
+      expect(res.status).toBe(500);
+      expect(res.body.message).toBe('Erro ao deletar item');
+      prisma.learningItem.delete.mockRestore();
+    });
+
     it('deve deletar um usuário com sucesso', async () => {
       const newUser = await prisma.user.create({
         data: {
@@ -119,6 +149,17 @@ describe('Admin Controller + Middleware', () => {
         .set('Cookie', `token=${authTokenAdmin}`);
       expect(res.status).toBe(200);
       expect(res.body.message).toMatch(/Usuário deletado com sucesso/);
+    });
+
+    it('deve retornar erro 500 ao deletar usuário (simulação)', async () => {
+      jest.spyOn(prisma.user, 'delete').mockRejectedValue(new Error('Erro simulado'));
+      const res = await request(app)
+        .delete('/api/admin/deleteuser')
+        .send({ id: 999 }) // ID inexistente
+        .set('Cookie', `token=${authTokenAdmin}`);
+      expect(res.status).toBe(500);
+      expect(res.body.message).toBe('Erro ao deletar usuário');
+      prisma.user.delete.mockRestore();
     });
   });
 });
