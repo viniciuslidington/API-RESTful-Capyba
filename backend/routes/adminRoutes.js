@@ -132,7 +132,7 @@ const router = express.Router();
 
 router.get("/users", validAdmin, getAllUsers);
 router.delete("/deleteuser", validAdmin, deleteUser);
-router.post("/items", validAdmin, addItem);
+router.post("/additem", validAdmin, addItem);
 router.post("/deleteitem", validAdmin, deleteItem);
 
 export default router;

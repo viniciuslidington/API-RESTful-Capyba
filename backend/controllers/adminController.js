@@ -11,7 +11,6 @@ export const getAllUsers = async (req, res) => {
             emailVerified: true,
             image: true,
             createdAt: true,
-            updatedAt: true,
         },
         });
     
