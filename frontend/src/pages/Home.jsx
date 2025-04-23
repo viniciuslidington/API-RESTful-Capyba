@@ -100,7 +100,7 @@ export default function Home() {
             <i className={`${styles.navIcon} fas fas fa-book`}></i>
             Cursos e Artigos
           </Link>
-          
+
           <Link to="/home/projetos" className={styles.navLink}>
             <i className={`${styles.navIcon} fas fa-folder`}></i>
             Projetos
@@ -116,7 +116,7 @@ export default function Home() {
             Meu Perfil
           </Link>
 
-          <button 
+          <button
             onClick={handleLogout}
             className={styles.logoutButton}
             disabled={isLoggingOut}

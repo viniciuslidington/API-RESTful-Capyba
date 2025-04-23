@@ -9,7 +9,7 @@ import Home from './pages/Home';
 import Projetos from './pages/Projetos';
 import Perfil from './pages/Perfil';
 import Register from './pages/Registrer'; 
-
+import MeusInteresses from './pages/MeuInteresses';
 
 export const AuthContext = createContext();
 
@@ -40,7 +40,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
-          {/* <Route path="/home/interesses" element={<ProtectedRoute><MeusInteresses /></ProtectedRoute>} /> */}
+          <Route path="/home/interesses" element={<ProtectedRoute><MeusInteresses /></ProtectedRoute>} />
           <Route path="/home/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
           <Route path="/home/projetos" element={<ProtectedRoute onlyVerified><Projetos /></ProtectedRoute>} />
         </Routes>
