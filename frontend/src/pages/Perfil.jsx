@@ -1,9 +1,10 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../App";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-import styles from "../styles/Login.module.css";
+
+import styles from "../styles/Perfil.module.css"; // Novo arquivo de estilos
 import logo from "../assets/logo.png";
 
 export default function Perfil() {
@@ -14,36 +15,33 @@ export default function Perfil() {
   const [success, setSuccess] = useState("");
   const [preview, setPreview] = useState("");
   const [isFetching, setIsFetching] = useState(true);
-  
+
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
     senhaAtual: "",
     novaSenha: "",
-    foto: null
+    foto: null,
   });
 
-  // Preenche os dados do usuário ao carregar
   useEffect(() => {
     const fetchUserData = async () => {
       setIsFetching(true);
       try {
-        const { data } = await axios.get('/api/auth/me', {
+        const { data } = await axios.get("/api/auth/me", {
           headers: {
-            'Authorization': `Bearer ${Cookies.get('token')}`
-          }
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
         });
 
-        // Preenche os campos com os dados do usuário
         setFormData({
           nome: data.name || "",
           email: data.email || "",
           senhaAtual: "",
           novaSenha: "",
-          foto: null
+          foto: null,
         });
 
-        // Define o preview da foto, se existir
         setPreview(data.fotoUrl || "");
       } catch (err) {
         console.error("Erro ao buscar informações do usuário:", err);
@@ -58,16 +56,16 @@ export default function Perfil() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData(prev => ({ ...prev, foto: file }));
+      setFormData((prev) => ({ ...prev, foto: file }));
       setPreview(URL.createObjectURL(file));
     }
   };
@@ -85,42 +83,41 @@ export default function Perfil() {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('nome', formData.nome);
-      formDataToSend.append('email', formData.email);
-      
+      formDataToSend.append("nome", formData.nome);
+      formDataToSend.append("email", formData.email);
+
       if (formData.novaSenha) {
         if (!formData.senhaAtual) {
           throw new Error("Para alterar a senha, informe a senha atual");
         }
-        formDataToSend.append('senhaAtual', formData.senhaAtual);
-        formDataToSend.append('novaSenha', formData.novaSenha);
-      }
-      
-      if (formData.foto) {
-        formDataToSend.append('foto', formData.foto);
+        formDataToSend.append("senhaAtual", formData.senhaAtual);
+        formDataToSend.append("novaSenha", formData.novaSenha);
       }
 
-      const { data } = await axios.put('/api/auth/editaruser', formDataToSend, {
+      if (formData.foto) {
+        formDataToSend.append("foto", formData.foto);
+      }
+
+      const { data } = await axios.put("/api/auth/editaruser", formDataToSend, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${Cookies.get('token')}`
-        }
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
       });
 
-      // Atualiza o contexto do usuário
       setUser(data.user);
       setSuccess("Perfil atualizado com sucesso!");
-      
-      // Limpa os campos de senha após sucesso
-      setFormData(prev => ({
+
+      setFormData((prev) => ({
         ...prev,
         senhaAtual: "",
-        novaSenha: ""
+        novaSenha: "",
       }));
-      
     } catch (err) {
       console.error("Erro ao atualizar perfil:", err);
-      setError(err.response?.data?.message || err.message || "Erro ao atualizar perfil");
+      setError(
+        err.response?.data?.message || err.message || "Erro ao atualizar perfil"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -135,154 +132,103 @@ export default function Perfil() {
   }
 
   return (
-    <div className={styles.loginContainer}>
-      <div className={styles.loginCard}>
-        <div className={styles.loginBox}>
-          <div className={styles.loginHeader}>
-            <img 
-              src={logo} 
-              alt="Logo da CapybAcademy" 
-              className={styles.logoImage} 
-              loading="lazy"
+    <div className={styles.perfilContainer}>
+      <div className={styles.perfilCard}>
+        <header className={styles.perfilHeader}>
+          <img
+            src={logo}
+            alt="Logo da CapybAcademy"
+            className={styles.logoImage}
+            loading="lazy"
+          />
+          <h1>Meu Perfil</h1>
+          <p>Gerencie suas informações pessoais</p>
+        </header>
+
+        <form onSubmit={handleSubmit} className={styles.perfilForm} noValidate>
+          {error && <div className={styles.errorMessage}>{error}</div>}
+          {success && <div className={styles.successMessage}>{success}</div>}
+
+          <div className={styles.inputGroup}>
+            <label htmlFor="nome">Nome Completo</label>
+            <input
+              id="nome"
+              name="nome"
+              type="text"
+              value={formData.nome}
+              onChange={handleChange}
+              required
+              disabled={isLoading}
             />
-            <h1 className={styles.loginTitle}>Meu Perfil</h1>
-            <p className={styles.loginSubtitle}>Gerencie suas informações pessoais</p>
           </div>
 
-          <form onSubmit={handleSubmit} className={styles.loginForm} noValidate>
-            {error && (
-              <div className={styles.errorMessage} role="alert">
-                {error}
-              </div>
-            )}
+          <div className={styles.inputGroup}>
+            <label htmlFor="email">E-mail</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              disabled={isLoading}
+            />
+          </div>
 
-            {success && (
-              <div className={styles.successMessage} role="alert">
-                {success}
-              </div>
-            )}
-
-            <div className={styles.inputGroup}>
-              <label htmlFor="nome" className={styles.inputLabel}>
-                Nome Completo
+          <div className={styles.inputGroup}>
+            <label>Foto de Perfil</label>
+            <div className={styles.photoContainer}>
+              {preview && (
+                <img src={preview} alt="Preview" className={styles.photoPreview} />
+              )}
+              <label className={styles.fileInputLabel}>
+                {preview ? "Alterar Foto" : "Adicionar Foto"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  disabled={isLoading}
+                />
               </label>
+            </div>
+          </div>
+
+          <div className={styles.passwordSection}>
+            <h3>Alterar Senha</h3>
+            <div className={styles.inputGroup}>
+              <label htmlFor="senhaAtual">Senha Atual</label>
               <input
-                id="nome"
-                name="nome"
-                type="text"
-                className={styles.inputField}
-                value={formData.name}
+                id="senhaAtual"
+                name="senhaAtual"
+                type="password"
+                value={formData.senhaAtual}
                 onChange={handleChange}
-                required
                 disabled={isLoading}
               />
             </div>
 
             <div className={styles.inputGroup}>
-              <label htmlFor="email" className={styles.inputLabel}>
-                E-mail
-              </label>
+              <label htmlFor="novaSenha">Nova Senha</label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                className={styles.inputField}
-                value={formData.email}
+                id="novaSenha"
+                name="novaSenha"
+                type="password"
+                value={formData.novaSenha}
                 onChange={handleChange}
-                required
                 disabled={isLoading}
               />
             </div>
+          </div>
 
-            <div className={styles.inputGroup}>
-              <label className={styles.inputLabel}>
-                Foto de Perfil
-              </label>
-              <div className={styles.photoContainer}>
-                {preview && (
-                  <img 
-                    src={preview} 
-                    alt="Preview" 
-                    className={styles.photoPreview} 
-                  />
-                )}
-                <label className={styles.fileInputLabel}>
-                  {preview ? "Alterar Foto" : "Adicionar Foto"}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoChange}
-                    disabled={isLoading}
-                    className={styles.fileInput}
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div className={styles.passwordSection}>
-              <h3 className={styles.sectionTitle}>Alterar Senha</h3>
-              
-              <div className={styles.inputGroup}>
-                <label htmlFor="senhaAtual" className={styles.inputLabel}>
-                  Senha Atual
-                </label>
-                <input
-                  id="senhaAtual"
-                  name="senhaAtual"
-                  type="password"
-                  placeholder="••••••••"
-                  className={styles.inputField}
-                  value={formData.senhaAtual}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                />
-              </div>
-
-              <div className={styles.inputGroup}>
-                <label htmlFor="novaSenha" className={styles.inputLabel}>
-                  Nova Senha
-                </label>
-                <input
-                  id="novaSenha"
-                  name="novaSenha"
-                  type="password"
-                  placeholder="••••••••"
-                  className={styles.inputField}
-                  value={formData.novaSenha}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                />
-                <p className={styles.passwordHint}>
-                  Deixe em branco para manter a senha atual
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.formActions}>
-              <button 
-                type="submit" 
-                className={styles.submitButton} 
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <span className={styles.buttonLoader}></span>
-                    Salvando...
-                  </>
-                ) : "Salvar Alterações"}
-              </button>
-              
-              <button 
-                type="button" 
-                className={styles.cancelButton}
-                onClick={() => navigate(-1)}
-                disabled={isLoading}
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
-        </div>
+          <div className={styles.formActions}>
+            <button type="submit" disabled={isLoading}>
+              {isLoading ? "Salvando..." : "Salvar Alterações"}
+            </button>
+            <button type="button" onClick={() => navigate(-1)} disabled={isLoading}>
+              Cancelar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
