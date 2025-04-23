@@ -49,7 +49,7 @@ export default function Projetos() {
   const handleEmailVerification = async () => {
     setIsEmailVerificationLoading(true);
     try {
-      await axios.post('/api/email/enviar-confirmacao-email');
+      await axios.post('https://backend-api-restful-capyba-production.up.railway.app/api/email/enviar-confirmacao-email');
       setError("Email de verificação enviado! Por favor, verifique sua caixa de entrada.");
     } catch {
       setError("Erro ao enviar email de verificação. Tente novamente mais tarde.");
