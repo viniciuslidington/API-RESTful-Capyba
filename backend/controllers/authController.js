@@ -29,6 +29,7 @@ export const registerUser = async (req, res) => {
     if (error.code === "P2002" && error.meta?.target?.includes("email")) {
       return res.status(400).json({ error: "Este e-mail já está em uso" });
     } else {
+      console.error("Erro ao registrar usuário:", error);
       res.status(500).json({ message: "Erro ao registrar usuário" });
     }
   }
