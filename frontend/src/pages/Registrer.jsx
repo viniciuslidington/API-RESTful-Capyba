@@ -5,6 +5,8 @@ import styles from "../styles/Register.module.css"; // Novo arquivo CSS
 import logo from "../assets/logo.png";
 import registerImage from "../assets/register-illustration.png"; // Adicione uma imagem ilustrativa
 
+axios.defaults.withCredentials = true;
+
 export default function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({

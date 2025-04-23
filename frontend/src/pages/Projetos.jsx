@@ -4,6 +4,8 @@ import axios from "axios";
 import styles from "../styles/Home.module.css";
 import Sidebar from "../components/Sidebar";
 
+axios.defaults.withCredentials = true;
+
 export default function Projetos() {
   const { user } = useContext(AuthContext);
   const [items, setItems] = useState([]);

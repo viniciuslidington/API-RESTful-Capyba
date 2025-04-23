@@ -4,6 +4,8 @@ import axios from "axios";
 import styles from "../styles/Home.module.css";
 import Sidebar from "../components/Sidebar";
 
+axios.defaults.withCredentials = true;
+
 export default function MeuInteresses() {
   const { user } = useContext(AuthContext);
   const [items, setItems] = useState([]);
@@ -31,7 +33,7 @@ export default function MeuInteresses() {
   const handleEmailVerification = async () => {
     setIsEmailVerificationLoading(true);
     try {
-      await axios.post('/api/email/enviar-confirmacao-email');
+      await axios.post('https://backend-api-restful-capyba-production.up.railway.app/api/email/enviar-confirmacao-email');
       setError("Email de verificação enviado! Por favor, verifique sua caixa de entrada.");
     } catch {
       setError("Erro ao enviar email de verificação. Tente novamente mais tarde.");

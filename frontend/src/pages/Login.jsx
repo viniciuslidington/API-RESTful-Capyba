@@ -6,6 +6,8 @@ import { AuthContext } from "../App";
 import styles from "../styles/Login.module.css";
 import logo from "../assets/logo.png";
 
+axios.defaults.withCredentials = true;
+
 export default function Login() {
   const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();

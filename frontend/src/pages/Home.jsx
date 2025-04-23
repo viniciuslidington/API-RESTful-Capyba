@@ -4,6 +4,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../styles/Home.module.css";
 
+axios.defaults.withCredentials = true;
 // Funções auxiliares
 const getFirstName = (fullName) => fullName?.split(" ")[0] || "Usuário";
 const getInitials = (name) => {

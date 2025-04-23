@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+axios.defaults.withCredentials = true;
+
 import styles from "../styles/Perfil.module.css"; // Novo arquivo de estilos
 import logo from "../assets/logo.png";
 
