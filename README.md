@@ -57,9 +57,10 @@ docker-compose up --build
 
 A aplicação estará disponível em:
 
-- **Frontend**: http://localhost:80
+- **Frontend**: http://localhost:5173
 - **Backend (API)**: http://localhost:3000
-- **PostgreSQL**: localhost:5432 (user: docker / pass: docker)
+- **PostgreSQL**: localhost:5432 (user: docker / pass: docker) - Banco containerzado pelo docker
+  obs.: Caso queria rodar localmente pelo terminal, é necessário criar um container expecífico para o banco postgres.
 
 > ⚠️ Lembre-se de configurar variáveis de ambiente no `.env`.
 
@@ -75,8 +76,6 @@ A aplicação estará disponível em:
    npm test  
 
    ```
-
-### Documentaçào OpenAPI e Swagger
 
 ### 📖 Documentação OpenAPI e Swagger
 
