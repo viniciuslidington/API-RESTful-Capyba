@@ -22,4 +22,4 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 # Comando para rodar a aplicação e aplicar as migrações
-CMD ["sh", "-c", "npx prisma migrate dev --name auto_migration && npx prisma migrate deploy && node prisma/seed.js && node index.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node prisma/seed.js && node index.js"]

@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import path from "path";
+import cors from "cors";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import dotenv from "dotenv";
@@ -14,6 +15,11 @@ import { setupSwaggerDocs } from "./config/swagger.js";
 dotenv.config();
 
 const app = express();
+
+app.use(cors({
+    origin: ["http://localhost:80", "http://localhost:5173"],
+    credentials: true,
+}));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
