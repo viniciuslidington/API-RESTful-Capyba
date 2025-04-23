@@ -61,7 +61,7 @@ export default function Register() {
         formDataToSend.append('photo', formData.photo);
       }
 
-      await axios.post('/api/auth/register', formDataToSend, {
+      await axios.post('https://backend-api-restful-capyba-production.up.railway.app/api/auth/register', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

@@ -26,11 +26,12 @@ export default function Home() {
   const [orderDirection, setOrderDirection] = useState("desc");
   const pageSize = 5;
 
+  
   const fetchItems = async () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get(`/api/items/getlist`, {
+      const response = await axios.get(`https://backend-api-restful-capyba-production.up.railway.app/api/items/getlist`, {
         params: {
           page,
           pageSize,

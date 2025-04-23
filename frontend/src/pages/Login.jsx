@@ -18,7 +18,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   const loginRequest = async (credentials) => {
-    const response = await axios.post("/api/auth/login", credentials);
+    const response = await axios.post("https://backend-api-restful-capyba-production.up.railway.app/api/auth/login", credentials);
     return response.data;
   };
 

@@ -15,7 +15,7 @@ export default function MeuInteresses() {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get(`/api/interesse/interesses`);
+      const response = await axios.get(`https://backend-api-restful-capyba-production.up.railway.app/api/interesse/interesses`);
       setItems(response.data.itens);
     } catch (err) {
       if (err.response?.status === 403) {

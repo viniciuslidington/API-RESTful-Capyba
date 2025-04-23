@@ -21,7 +21,7 @@ export default function Projetos() {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get(`/api/items/getprojects`, {
+      const response = await axios.get(`https://backend-api-restful-capyba-production.up.railway.app/api/items/getprojects`, {
         params: {
           page,
           pageSize,

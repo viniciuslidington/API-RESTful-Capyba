@@ -28,7 +28,7 @@ export default function Perfil() {
     const fetchUserData = async () => {
       setIsFetching(true);
       try {
-        const { data } = await axios.get("/api/auth/me", {
+        const { data } = await axios.get("https://backend-api-restful-capyba-production.up.railway.app/api/auth/me", {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
           },
