@@ -78,7 +78,7 @@ export default function Login() {
               className={styles.logoImage} 
               loading="lazy"
             />
-            <h1 className={styles.loginTitle}>CapybAcademy</h1>
+            <h1 className={styles.loginTitle}>Capyba Academy</h1>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.loginForm} noValidate>
