@@ -25,7 +25,7 @@ export const enviarConfirmacaoEmail = async (req, res) => {
             expiresIn: process.env.JWT_EMAIL_EXPIRATION
         });
 
-        const linkDeVerificacao = `http://localhost:3000/api/email/confirmar-email?token=${tokenemail}`;
+        const linkDeVerificacao = `https://backend-api-restful-capyba-production.up.railway.app/api/email/confirmar-email?token=${tokenemail}`;
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
