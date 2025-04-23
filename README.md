@@ -2,6 +2,8 @@
 
 Capyba Academy é uma solução educacional desenvolvida para facilitar o compartilhamento e acesso a cursos, artigos e projetos recomendados pela empresa Capyba para seus colaboradores. O objetivo é tornar o aprendizado mais prático e acessível, promovendo o crescimento profissional dentro da organização.
 
+Durante o processo de desenvolvimento, foi simulado um ecossistema de trabalho real com uso de **commits frequentes** e **merge requests**, reforçando práticas de versionamento e entregas contínuas para demonstrar organização e controle no ciclo de desenvolvimento.
+
 ---
 
 ## 🚀 Tecnologias Utilizadas
@@ -45,11 +47,13 @@ O frontend foi desenvolvido com apoio de uma inteligência artificial para agili
 ### 🔧 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/sua-org/capyba-academy.git
-cd capyba-academy
+git clone https://github.com/viniciuslidington/API-RESTful-Capyba.git
+cd API-RESTful-Capyba
 ```
 
-### 🐳 2. Rodar com Docker (recomendado)
+---
+
+## ✅ Rodar a aplicação com Docker
 
 ```bash
 docker-compose up --build
@@ -59,55 +63,86 @@ A aplicação estará disponível em:
 
 - **Frontend**: http://localhost:5173
 - **Backend (API)**: http://localhost:3000
-- **PostgreSQL**: localhost:5432 (user: docker / pass: docker) - Banco containerzado pelo docker
-  obs.: Caso queria rodar localmente pelo terminal, é necessário criar um container expecífico para o banco postgres.
+- **PostgreSQL**: localhost:5432 (user: docker / pass: docker)
 
-> ⚠️ Lembre-se de configurar variáveis de ambiente no `.env`.
+> ⚠️ Lembre-se de configurar as variáveis de ambiente no arquivo `.env`, conforme o exemplo disponível.
 
 ---
 
-### 🧪 3. Rodar os testes automatizados
+## 🔧 Executar localmente via terminal
 
-#### Backend
+Você pode rodar a aplicação sem Docker da seguinte forma:
 
-1. Navegue até a pasta do backend:
-   ```bash
-   cd backend
-   npm test  
+### Backend
+```bash
+cd backend
+npm install
+npx prisma migrate dev --name init
+npx prisma db seed
+npm run dev
+```
 
-   ```
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-### 📖 Documentação OpenAPI e Swagger
+---
 
-A documentação Swagger é uma ferramenta poderosa para entender e interagir com os endpoints, parâmetros e respostas da API. Siga os passos abaixo para acessá-la:
+## 🧪 Rodar os testes automatizados
 
-#### Passo a Passo:
+### Backend
+```bash
+cd backend
+npm install
+npm test
+```
 
-1. Certifique-se de que a aplicação está rodando localmente ou no servidor.
-2. Abra um navegador web.
-3. Navegue até o endpoint do Swagger UI : [EndPoint APIs REST](http://localhost:3000/api-docs).
-4. Explore os endpoints disponíveis e seus detalhes.
+---
 
-> **Nota:**
->
-> - A URL exata para a documentação Swagger pode variar dependendo do framework ou configuração utilizada.
-> - Certifique-se de que o Swagger está devidamente configurado na aplicação para gerar a documentação.
+## 🌐 Acessos Online (Deploy em Produção)
 
-## 🔑 Autenticação
+- 🔗 **Repositório:** https://github.com/viniciuslidington/API-RESTful-Capyba
+- 💻 **Aplicação em Produção:** https://capybacademy.up.railway.app/
+- 📚 **Documentação da API (Swagger):** https://backend-api-restful-capyba-production.up.railway.app/api-docs
+
+---
+
+## 📖 Documentação OpenAPI / Swagger
+
+A documentação Swagger permite explorar todos os endpoints da API de forma visual e interativa.
+
+### Como acessar:
+
+1. Garanta que a aplicação esteja rodando localmente ou no servidor.
+2. Acesse no navegador: http://localhost:3000/api-docs
+3. Explore os endpoints, parâmetros e respostas.
+
+> Obs.: Na versão online, a documentação está disponível em:
+> https://backend-api-restful-capyba-production.up.railway.app/api-docs
+
+---
+
+## 🔑 Funcionalidades de Autenticação
 
 - Login com e-mail e senha
-- Usuários só podem acessar a aba "Projetos" após validarem o e-mail
-- Possível editar perfil, trocar senha e fazer upload de imagem
+- Verificação de e-mail via link enviado por e-mail (com expiração de 5 minutos)
+- Apenas usuários com e-mail verificado acessam a aba **Projetos**
+- Atualização de perfil com troca de nome, e-mail, senha e foto
 
 ---
 
 ## 🛠️ Próximos Passos
 
-- 🔜 Aprimoramento do frontend com acesso administrativo
-- 🔜 Funcionalidade para manipulação de itens pelos usuários
+- Aprimoramento do frontend com painel administrativo
+- Marcar itens como "interesse" e "concluído"
+- Melhorar feedback visual no frontend
 
 ---
 
 ## 🤝 Agradecimentos
 
-Projeto desenvolvido por [Vinícius Lidington](https://github.com/viniciuslidigton)
+Desenvolvido por [Vinícius Lidington](https://github.com/viniciuslidington) para o desafio da Capyba 🚀
+
