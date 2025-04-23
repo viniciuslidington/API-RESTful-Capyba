@@ -82,7 +82,7 @@ export default function Home() {
     <div className={styles.homeContainer}>
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
-          <h2 className={styles.logoText}>CapybAcademy</h2>
+          <h2 className={styles.logoText}>Capyba Academy</h2>
           <div className={styles.userContainer}>
             <div className={styles.userAvatar}>
               {getInitials(user?.name)}
@@ -95,14 +95,25 @@ export default function Home() {
         </div>
 
         <nav className={styles.sidebarNav}>
-          <Link to="/home/perfil" className={styles.navLink}>
-            <i className={`${styles.navIcon} fas fa-user`}></i>
-            Meu Perfil
+
+          <Link to="/home" className={styles.navLink}>
+            <i className={`${styles.navIcon} fas fas fa-book`}></i>
+            Cursos e Artigos
           </Link>
           
           <Link to="/home/projetos" className={styles.navLink}>
             <i className={`${styles.navIcon} fas fa-folder`}></i>
             Projetos
+          </Link>
+
+          <Link to="/home/interesses" className={styles.navLink}>
+            <i className={`${styles.navIcon} fas fa-heart`}></i>
+            Meus Interesses
+          </Link>
+
+          <Link to="/home/perfil" className={styles.navLink}>
+            <i className={`${styles.navIcon} fas fa-user`}></i>
+            Meu Perfil
           </Link>
 
           <button 

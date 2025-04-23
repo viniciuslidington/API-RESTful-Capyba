@@ -49,7 +49,7 @@ export default function Projetos() {
     try {
       await axios.post('/api/email/enviar-confirmacao-email');
       setError("Email de verificação enviado! Por favor, verifique sua caixa de entrada.");
-    } catch (err) {
+    } catch {
       setError("Erro ao enviar email de verificação. Tente novamente mais tarde.");
     } finally {
       setIsEmailVerificationLoading(false);

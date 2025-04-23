@@ -97,7 +97,7 @@ export default function Register() {
           <div className={styles.formContainer}>
             <img 
               src={logo} 
-              alt="Logo da CapybAcademy" 
+              alt="Logo da Capyba Academy" 
               className={styles.logoImage} 
             />
             <h1 className={styles.formTitle}>Criar Conta</h1>

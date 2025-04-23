@@ -10,13 +10,13 @@ import Projetos from './pages/Projetos';
 import Perfil from './pages/Perfil';
 import Register from './pages/Registrer'; 
 
+
 export const AuthContext = createContext();
 
-const ProtectedRoute = ({ children, onlyVerified = false }) => {
+const ProtectedRoute = ({ children}) => {
   const { user } = useContext(AuthContext);
 
-  if (!user) return <Navigate to="/login" />;
-  if (onlyVerified && !user.emailVerified) return <Navigate to="/" />;
+  if (!user) return <Navigate to="/" />;
 
   return children;
 };
@@ -40,6 +40,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
+          {/* <Route path="/home/interesses" element={<ProtectedRoute><MeusInteresses /></ProtectedRoute>} /> */}
           <Route path="/home/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
           <Route path="/home/projetos" element={<ProtectedRoute onlyVerified><Projetos /></ProtectedRoute>} />
         </Routes>

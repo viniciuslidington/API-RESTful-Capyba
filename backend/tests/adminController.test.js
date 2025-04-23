@@ -39,7 +39,11 @@ describe('Admin Controller + Middleware', () => {
     // Limpa tudo
     await prisma.learningItem.deleteMany({
       where: {
-        title: 'Item Teste',
+        OR: [
+          { title: 'Item Delete' },
+          { title: 'Item Teste' },
+          { title: 'Deletar' },
+        ],
       },
     });
     await prisma.user.deleteMany({
