@@ -17,7 +17,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: "https://capybacademy.up.railway.app/",
+    origin: "https://capybacademy.up.railway.app",
     credentials: true,
 }));
 
