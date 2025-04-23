@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int                @id @default(autoincrement())
+  name            String
+  email           String             @unique
+  emailVerified   Boolean            @default(false)
+  password        String
+  image           String?
+  interests       UserLearningItem[] // Itens que o usuário demonstrou interesse
+  createdAt       DateTime           @default(now())
+}
+
+model LearningItem {
+  id               Int                @id @default(autoincrement())
+  title            String
+  description      String
+  type             String             // "Curso", "Artigo", "Projeto"
+  public           Boolean            @default(true)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  interestedUsers  UserLearningItem[] // Usuários que demonstraram interesse
+}
+
+model UserLearningItem {
+  userId         Int
+  learningItemId Int
+  createdAt      DateTime @default(now())
+
+  user           User         @relation(fields: [userId], references: [id])
+  learningItem   LearningItem @relation(fields: [learningItemId], references: [id])
+
+  @@id([userId, learningItemId]) // Chave primária composta
+}

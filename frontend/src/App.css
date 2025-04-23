@@ -1,10 +1,17 @@
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  height: 100%;
 }
-
+/* Adicione isso ao arquivo global de estilos (ex: index.css ou App.css) */
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Evita o scroll horizontal */
+  width: 100%;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
