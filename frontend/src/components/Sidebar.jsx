@@ -24,7 +24,7 @@ export default function Sidebar() {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      await axios.post('/api/auth/logout', {}, { withCredentials: true });
+      await axios.post('https://backend-api-restful-capyba-production.up.railway.app/api/auth/logout', {}, { withCredentials: true });
     } finally {
       setUser(null);
       navigate("/", { replace: true });
