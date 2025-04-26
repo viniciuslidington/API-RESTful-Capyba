@@ -13,7 +13,7 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    photo: null
+    image: null
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +31,7 @@ export default function Register() {
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData(prev => ({ ...prev, photo: file }));
+      setFormData(prev => ({ ...prev, image: file }));
       setPreview(URL.createObjectURL(file));
     }
   };
@@ -59,8 +59,8 @@ export default function Register() {
       formDataToSend.append('name', formData.name);
       formDataToSend.append('email', formData.email);
       formDataToSend.append('password', formData.password);
-      if (formData.photo) {
-        formDataToSend.append('photo', formData.photo);
+      if (formData.image) {
+        formDataToSend.append('image', formData.image);
       }
 
       await axios.post('https://backend-api-restful-capyba-production.up.railway.app/api/auth/register', formDataToSend, {
@@ -185,12 +185,12 @@ export default function Register() {
                 </div>
 
                 <div className={styles.inputGroup}>
-                  <label htmlFor="photo" className={styles.inputLabel}>
+                  <label htmlFor="image" className={styles.inputLabel}>
                     Foto (Opcional)
                   </label>
                   <label className={styles.fileInput}>
                     <input
-                      id="photo"
+                      id="image"
                       type="file"
                       accept="image/*"
                       onChange={handlePhotoChange}
@@ -198,7 +198,7 @@ export default function Register() {
                       style={{ display: 'none' }}
                     />
                     <span className={styles.fileInputText}>
-                      {formData.photo ? formData.photo.name : "Selecionar"}
+                      {formData.image ? formData.image.name : "Selecionar"}
                     </span>
                   </label>
                 </div>
