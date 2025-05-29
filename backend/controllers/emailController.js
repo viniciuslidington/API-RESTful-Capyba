@@ -80,7 +80,7 @@ export const enviarConfirmacaoEmail = async (req, res) => {
               ]
           });
 
-        return res.status(200).json({ message: "Email de confirmação enviado" });
+        return res.status(200).json({ message: "Email de confirmação enviado para o seu e-mail: " + user.email , tokenemail});
     }catch(error){
         return res.status(500).json({ message: "Erro ao enviar email de confirmação" });
     }
