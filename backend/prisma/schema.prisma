@@ -13,6 +13,7 @@ model User {
   email           String             @unique
   emailVerified   Boolean            @default(false)
   password        String
+  admin           Boolean            @default(false)
   image           String?
   interests       UserLearningItem[] // Itens que o usuário demonstrou interesse
   createdAt       DateTime           @default(now())
