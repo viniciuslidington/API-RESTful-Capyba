@@ -20,7 +20,6 @@ export const getAllUsers = async (req, res) => {
     }
 };
 
-
 export const deleteUser = async (req, res) => {
     const { id } = req.body;
 
@@ -37,6 +36,14 @@ export const deleteUser = async (req, res) => {
     };
 };
 
+export const getAllItems = async (req, res) => {
+    try {
+        const items = await prisma.learningItem.findMany();
+        res.status(200).json(items);
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao buscar itens" });
+    }
+};
 
 export const addItem = async (req, res) => {
     const { title , description , type } = req.body;
@@ -56,7 +63,6 @@ export const addItem = async (req, res) => {
     };
 };
 
-
 export const deleteItem = async (req, res) => {
     const { id } = req.body;
 
@@ -72,4 +78,3 @@ export const deleteItem = async (req, res) => {
         res.status(500).json({ message: "Erro ao deletar item" });
     };
 };
-

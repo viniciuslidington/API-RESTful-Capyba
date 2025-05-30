@@ -1,6 +1,6 @@
 import { validAdmin } from "../middlewares/adminMiddleware.js";    
 import express from "express";
-import { getAllUsers, deleteUser, deleteItem, addItem } from "../controllers/adminController.js";
+import { getAllUsers, deleteUser,getAllItems, deleteItem, addItem } from "../controllers/adminController.js";
 
 const router = express.Router();
 
@@ -73,6 +73,53 @@ const router = express.Router();
  *       500:
  *         description: Erro ao deletar usuário
  */
+/**
+ * @swagger
+ * /api/admin/allitems:
+ *   get:
+ *     summary: Retorna todos os itens cadastrados (acesso administrativo)
+ *     tags: [Admin]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de todos os itens retornada com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: Identificador único do item
+ *                   title:
+ *                     type: string
+ *                     description: Título do item
+ *                   description:
+ *                     type: string
+ *                     description: Descrição do item
+ *                   type:
+ *                     type: string
+ *                     description: "Tipo do item (ex: 'projeto', 'curso', 'artigo')"
+ *                   # Adicione aqui outros campos que seus itens possam ter
+ *                   # Exemplo:
+ *                   # createdAt:
+ *                   #   type: string
+ *                   #   format: date-time
+ *                   #   description: Data de criação do item
+ *                   # updatedAt:
+ *                   #   type: string
+ *                   #   format: date-time
+ *                   #   description: Data da última atualização do item
+ *       401:
+ *         description: "Não autorizado (ex: token/cookie ausente ou inválido)"
+ *       403:
+ *         description: "Proibido (ex: usuário não tem permissão de administrador)"
+ *       500:
+ *         description: Erro interno do servidor ao buscar os itens
+ */
 
 /**
  * @swagger
@@ -132,6 +179,7 @@ const router = express.Router();
 
 router.get("/users", validAdmin, getAllUsers);
 router.delete("/deleteuser", validAdmin, deleteUser);
+router.get("/allitems", validAdmin, getAllItems);
 router.post("/additem", validAdmin, addItem);
 router.post("/deleteitem", validAdmin, deleteItem);
 
