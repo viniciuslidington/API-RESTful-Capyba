@@ -18,7 +18,7 @@ export const validAdmin = async (req, res, next) => {
             },
         });
     
-        const isAdmin = user.email && user.email.includes("admin@capyba");
+        const isAdmin = user.admin;
 
         if (isAdmin) {
             next();
