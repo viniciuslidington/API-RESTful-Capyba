@@ -77,48 +77,90 @@ const router = express.Router();
  * @swagger
  * /api/admin/allitems:
  *   get:
- *     summary: Retorna todos os itens cadastrados (acesso administrativo)
+ *     summary: Retorna todos os itens cadastrados com paginação, busca e ordenação (acesso administrativo)
  *     tags: [Admin]
  *     security:
  *       - cookieAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Número da página para paginação.
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *           default: 5
+ *         description: Quantidade de itens por página.
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Termo de busca para filtrar itens por título ou descrição.
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: string
+ *           default: createdAt
+ *           enum: [title, description, type, createdAt, updatedAt]
+ *         description: Campo pelo qual os itens serão ordenados.
+ *       - in: query
+ *         name: orderDirection
+ *         schema:
+ *           type: string
+ *           default: desc
+ *           enum: [asc, desc]
+ *         description: Direção da ordenação (ascendente ou descendente).
  *     responses:
  *       200:
- *         description: Lista de todos os itens retornada com sucesso.
+ *         description: Lista de itens retornada com sucesso, incluindo informações de paginação.
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                     description: Identificador único do item
- *                   title:
- *                     type: string
- *                     description: Título do item
- *                   description:
- *                     type: string
- *                     description: Descrição do item
- *                   type:
- *                     type: string
- *                     description: "Tipo do item (ex: 'projeto', 'curso', 'artigo')"
- *                   # Adicione aqui outros campos que seus itens possam ter
- *                   # Exemplo:
- *                   # createdAt:
- *                   #   type: string
- *                   #   format: date-time
- *                   #   description: Data de criação do item
- *                   # updatedAt:
- *                   #   type: string
- *                   #   format: date-time
- *                   #   description: Data da última atualização do item
+ *               type: object
+ *               properties:
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         description: Identificador único do item.
+ *                       title:
+ *                         type: string
+ *                         description: Título do item.
+ *                       description:
+ *                         type: string
+ *                         description: Descrição do item.
+ *                       type:
+ *                         type: string
+ *                         description: "Tipo do item (ex: 'projeto', 'curso', 'artigo')."
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         description: Data de criação do item.
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *                         description: Data da última atualização do item.
+ *                 total:
+ *                   type: integer
+ *                   description: Número total de itens correspondentes à busca.
+ *                 page:
+ *                   type: integer
+ *                   description: Número da página atual.
+ *                 pageSize:
+ *                   type: integer
+ *                   description: Quantidade de itens por página.
  *       401:
  *         description: "Não autorizado (ex: token/cookie ausente ou inválido)"
  *       403:
  *         description: "Proibido (ex: usuário não tem permissão de administrador)"
  *       500:
- *         description: Erro interno do servidor ao buscar os itens
+ *         description: Erro interno do servidor ao buscar os itens.
  */
 
 /**
