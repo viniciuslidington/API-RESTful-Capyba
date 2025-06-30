@@ -102,14 +102,6 @@ npm test
 
 ---
 
-## 🌐 Acessos Online (Deploy em Produção)
-
-- 🔗 **Repositório:** https://github.com/viniciuslidington/API-RESTful-Capyba
-- 💻 **Aplicação em Produção:** https://capybacademy.up.railway.app/
-- 📚 **Documentação da API (Swagger):** https://backend-api-restful-capyba-production.up.railway.app/api-docs
-
----
-
 ## 📖 Documentação OpenAPI / Swagger
 
 A documentação Swagger permite explorar todos os endpoints da API de forma visual e interativa.
@@ -119,9 +111,6 @@ A documentação Swagger permite explorar todos os endpoints da API de forma vis
 1. Garanta que a aplicação esteja rodando localmente ou no servidor.
 2. Acesse no navegador: http://localhost:3000/api-docs
 3. Explore os endpoints, parâmetros e respostas.
-
-> Obs.: Na versão online, a documentação está disponível em:
-> https://backend-api-restful-capyba-production.up.railway.app/api-docs
 
 ---
 
