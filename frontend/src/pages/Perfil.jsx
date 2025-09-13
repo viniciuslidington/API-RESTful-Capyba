@@ -1,10 +1,14 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../App";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-import styles from "../styles/Perfil.module.css"; // Novo arquivo de estilos
+// It's better to use Home.module.css for the main layout for consistency,
+// and Perfil.module.css for styles specific to the profile content itself.
+import homeStyles from "../styles/Home.module.css"; // For homeContainer, mainContent
+import styles from "../styles/Perfil.module.css";   // For perfilCard, perfilHeader, etc.
+import Sidebar from "../components/Sidebar";
 import logo from "../assets/logo.png";
 
 export default function Perfil() {
@@ -15,6 +19,7 @@ export default function Perfil() {
   const [success, setSuccess] = useState("");
   const [preview, setPreview] = useState("");
   const [isFetching, setIsFetching] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -62,11 +67,15 @@ export default function Perfil() {
     }));
   };
 
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData((prev) => ({ ...prev, foto: file }));
-      setPreview(URL.createObjectURL(file));
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await axios.post('/api/auth/logout', {}, { withCredentials: true });
+    } finally {
+      setUser(null);
+      Cookies.remove("token");
+      navigate("/", { replace: true });
+      setIsLoggingOut(false);
     }
   };
 
@@ -123,113 +132,93 @@ export default function Perfil() {
     }
   };
 
-  if (isFetching) {
-    return (
-      <div className={styles.loadingContainer}>
-        <p>Carregando informações...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className={styles.perfilContainer}>
-      <div className={styles.perfilCard}>
-        <header className={styles.perfilHeader}>
-          <img
-            src={logo}
-            alt="Logo da CapybAcademy"
-            className={styles.logoImage}
-            loading="lazy"
-          />
-          <h1>Meu Perfil</h1>
-          <p>Gerencie suas informações pessoais</p>
-        </header>
-
-        <form onSubmit={handleSubmit} className={styles.perfilForm} noValidate>
-          {error && <div className={styles.errorMessage}>{error}</div>}
-          {success && <div className={styles.successMessage}>{success}</div>}
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="nome">Nome Completo</label>
-            <input
-              id="nome"
-              name="nome"
-              type="text"
-              value={formData.nome}
-              onChange={handleChange}
-              required
-              disabled={isLoading}
+    // Using homeStyles for the outer layout
+    <div className={homeStyles.homeContainer}> 
+      <Sidebar />
+      {/* Using homeStyles for the main content area */}
+      <main className={homeStyles.mainContent}> 
+        {/* Using Perfil.module.css 'styles' for the content specific to the profile page */}
+        <div className={styles.perfilCard}> 
+          <header className={styles.perfilHeader}>
+            <img
+              src={logo}
+              alt="Logo da CapybAcademy"
+              className={styles.logoImage}
+              loading="lazy"
             />
-          </div>
+            <h1>Meu Perfil</h1>
+            <p>Gerencie suas informações pessoais</p>
+          </header>
 
-          <div className={styles.inputGroup}>
-            <label htmlFor="email">E-mail</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              disabled={isLoading}
-            />
-          </div>
+          <form onSubmit={handleSubmit} className={styles.perfilForm} noValidate>
+            {error && <div className={styles.errorMessage}>{error}</div>}
+            {success && <div className={styles.successMessage}>{success}</div>}
 
-          <div className={styles.inputGroup}>
-            <label>Foto de Perfil</label>
-            <div className={styles.photoContainer}>
-              {preview && (
-                <img src={preview} alt="Preview" className={styles.photoPreview} />
-              )}
-              <label className={styles.fileInputLabel}>
-                {preview ? "Alterar Foto" : "Adicionar Foto"}
+            <div className={styles.inputGroup}>
+              <label htmlFor="nome">Nome Completo</label>
+              <input
+                id="nome"
+                name="nome"
+                type="text"
+                value={formData.nome}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label htmlFor="email">E-mail</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className={styles.passwordSection}>
+              <h3>Alterar Senha</h3>
+              <div className={styles.inputGroup}>
+                <label htmlFor="senhaAtual">Senha Atual</label>
                 <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
+                  id="senhaAtual"
+                  name="senhaAtual"
+                  type="password"
+                  value={formData.senhaAtual}
+                  onChange={handleChange}
                   disabled={isLoading}
                 />
-              </label>
-            </div>
-          </div>
+              </div>
 
-          <div className={styles.passwordSection}>
-            <h3>Alterar Senha</h3>
-            <div className={styles.inputGroup}>
-              <label htmlFor="senhaAtual">Senha Atual</label>
-              <input
-                id="senhaAtual"
-                name="senhaAtual"
-                type="password"
-                value={formData.senhaAtual}
-                onChange={handleChange}
-                disabled={isLoading}
-              />
+              <div className={styles.inputGroup}>
+                <label htmlFor="novaSenha">Nova Senha</label>
+                <input
+                  id="novaSenha"
+                  name="novaSenha"
+                  type="password"
+                  value={formData.novaSenha}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                />
+              </div>
             </div>
 
-            <div className={styles.inputGroup}>
-              <label htmlFor="novaSenha">Nova Senha</label>
-              <input
-                id="novaSenha"
-                name="novaSenha"
-                type="password"
-                value={formData.novaSenha}
-                onChange={handleChange}
-                disabled={isLoading}
-              />
+            <div className={styles.formActions}>
+              <button type="submit" disabled={isLoading || isLoggingOut}>
+                {isLoading ? "Salvando..." : "Salvar Alterações"}
+              </button>
+              <button type="button" onClick={() => navigate(-1)} disabled={isLoading || isLoggingOut}>
+                Cancelar
+              </button>
             </div>
-          </div>
-
-          <div className={styles.formActions}>
-            <button type="submit" disabled={isLoading}>
-              {isLoading ? "Salvando..." : "Salvar Alterações"}
-            </button>
-            <button type="button" onClick={() => navigate(-1)} disabled={isLoading}>
-              Cancelar
-            </button>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      </main>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../App";
 import axios from "axios";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Home.module.css"; // Assuming shared styles for layout
 import Sidebar from "../components/Sidebar";
 
 export default function Projetos() {
@@ -82,28 +82,28 @@ export default function Projetos() {
         {error && error.includes("Email não verificado") ? (
           <div className={styles.emailVerificationContainer}>
             <div className={styles.emailVerificationCard}>
-          <h2>Acesso Restrito</h2>
-          <p>{error}</p>
-          <button
-            onClick={handleEmailVerification}
-            disabled={isEmailVerificationLoading}
-            className={styles.verificationButton}
-          >
-            {isEmailVerificationLoading ? (
-              <>
-                <i className="fas fa-spinner fa-spin"></i>
-                Enviando...
-              </>
-            ) : (
-              <>
-                <i className="fas fa-envelope"></i>
-                Enviar Email de Verificação
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-      ) : (
+              <h2>Acesso Restrito</h2>
+              <p>{error}</p>
+              <button
+                onClick={handleEmailVerification}
+                disabled={isEmailVerificationLoading}
+                className={styles.verificationButton}
+              >
+                {isEmailVerificationLoading ? (
+                  <>
+                    <i className="fas fa-spinner fa-spin"></i>
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    <i className="fas fa-envelope"></i>
+                    Enviar Email de Verificação
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        ) : (
           <div className={styles.itemsContainer}>
             <div className={styles.itemsHeader}>
               <input
@@ -119,13 +119,13 @@ export default function Projetos() {
                 </button>
                 <button onClick={() => handleSort('createdAt')}>
                   Data {orderBy === 'createdAt' && (orderDirection === 'asc' ? '↑' : '↓')}
-            </button>
+                </button>
               </div>
             </div>
             {loading ? (
               <div className={styles.loading}>
                 <i className="fas fa-spinner fa-spin"></i> Carregando...
-          </div>
+              </div>
             ) : error && !error.includes("Email não verificado") ? (
               <div className={styles.error}>{error}</div>
             ) : (
@@ -136,7 +136,7 @@ export default function Projetos() {
                       <h3>{item.title}</h3>
                       <p>{item.description}</p>
                       <span className={styles.itemType}>{item.type}</span>
-    </div>
+                    </div>
                   ))}
                 </div>
 

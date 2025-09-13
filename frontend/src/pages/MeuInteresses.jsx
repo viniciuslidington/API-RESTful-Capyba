@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../App";
 import axios from "axios";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Home.module.css"; // Assuming shared styles for layout
 import Sidebar from "../components/Sidebar";
 
 export default function MeuInteresses() {
@@ -73,7 +73,7 @@ export default function MeuInteresses() {
             </div>
           </div>
         ) : (
-          <div className={styles.itemsContainer}>
+          <div className={styles.itemsContainer}> {/* Or a more specific container if needed */}
             <div className={styles.itemsHeader}>
               <h2>Meus Interesses</h2>
             </div>
